@@ -1,0 +1,87 @@
+﻿<UserControl x:Class="SomeQuest.Views.ProjectsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:viewmodels="clr-namespace:SomeQuest.ViewModels"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=viewmodels:ProjectsViewModel}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="7*"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Text="Проекты"
+                   Grid.Row="0" Grid.Column="0"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   FontSize="20"/>
+
+        <TextBox Text="Поиск"
+                 Grid.Row="0" Grid.Column="2"
+                 Height="30" Width="200"
+                 Margin="5"></TextBox>
+
+        <Button Content="Поиск"
+                Grid.Row="0" Grid.Column="3"
+                Height="30"
+                Margin="5"></Button>
+
+        <ListView ItemsSource="{Binding Projects}"                  
+                  SelectedItem="{Binding SelectedProject}"
+                  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Id"   Width="50"  DisplayMemberBinding="{Binding Path=Id}"/>
+                    <GridViewColumn Header="Name" Width="300" DisplayMemberBinding="{Binding Path=Name}"/>
+                </GridView>
+            </ListView.View>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction
+                            Command="{Binding RunProjectCommand}"
+                            CommandParameter="{Binding SelectedProject}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </ListView>
+
+        <StackPanel DataContext="{Binding SelectedProject}"
+                    Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="3"
+                    Margin="5">
+            <TextBlock Text="{Binding Id}"/>
+            <TextBlock Text="{Binding Name}"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4">
+            <Button Content="Добавить"
+                    Height="30" Width="100"
+                    Margin="5"
+                    Command="{Binding NavigateEditorCommand}"/>
+            <Button Content="Редактировать"
+                    Height="30" Width="100"
+                    Margin="5"/>
+            <Button Content="Удалить"
+                    Height="30" Width="90"
+                    Margin="5"/>
+        </StackPanel>
+
+        <Button Content="Запустить"
+                Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3"
+                Height="30" Width="100"
+                HorizontalAlignment="Right"
+                Margin="5"
+                Command="{Binding RunProjectCommand}">
+        </Button>
+    </Grid>
+</UserControl>
